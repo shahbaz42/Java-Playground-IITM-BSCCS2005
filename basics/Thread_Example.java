@@ -20,8 +20,6 @@ public class Thread_Example implements Runnable {
         Thread thread2 = new Thread(obj2);
         thread2.start();
 
-
-
         System.out.println("Outside Thread");
     }
     public void run() {
