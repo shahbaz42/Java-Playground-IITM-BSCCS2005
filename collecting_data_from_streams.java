@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.lang.reflect.Array;
+import java.util.HashMap;
 
 class Animal implements Comparable<Animal>{
     private String name;
@@ -153,7 +155,53 @@ public class collecting_data_from_streams {
         ));
         System.out.println(idToPerson);
 
-        // handling 
-        
+        // handling duplicate keys 
+        System.out.println("\nHandling duplicate keys by discarding the value of old key");
+        Stream<Person> stream10 = Stream.of(shahbaz, madhavan, keshav, shahbaz);
+        Map<Integer, String> idToString2 = new HashMap<>();
+        idToString2 = stream10.collect(Collectors.toMap(
+            Person::getId,
+            Person::getName,
+            (oldName, newName) -> { return newName; }
+
+        ));
+        System.out.println(idToString2);
+
+        // collecting stream into map handling duplicate keys
+        System.out.println("\n Handling duplicate keys by merging the values.");
+        Person anup = new Person(04, "Anup", 21);
+        Person venketesh = new Person(05, "Venketesh", 21 );
+        Stream<Person> stream11 = Stream.of(shahbaz, anup, venketesh, madhavan, keshav);
+        Map<Integer, String> ageToPerson = new HashMap<>();
+        ageToPerson = stream11.collect(Collectors.toMap(
+            Person::getAge,
+            Person::getName, 
+            (oldName, newName) -> oldName + "; " + newName 
+        ));
+        System.out.println(ageToPerson);
+
+        // Grouping values of a stream using Collectors.groupingBy()
+        System.out.println("\nGrouping values using Collectors.groupingBy() ");
+        Stream<Person> stream12 = Stream.of(shahbaz, anup, madhavan, venketesh, keshav);
+        Map<Integer, List<Person>> groupByAge = stream12.collect(Collectors.groupingBy(
+            Person::getAge
+        ));
+        System.out.println(groupByAge);
+
+        // Partitioning values using Collectors.partioningBy()
+        // partitionBy returns a Map<Boolean, List>
+        System.out.println("\nPartitioning values using Collectors.partioningBy()");
+        Stream<Person> stream13 = Stream.of(shahbaz, anup, venketesh, madhavan, keshav);
+        Map<Boolean, List<Person>> agePartition = new HashMap<Boolean,List<Person>>();
+            agePartition = stream13.collect(Collectors.partitioningBy( p -> p.getAge() > 25
+        ));
+        System.out.println("People with age > 25 :");
+        for (Person p : agePartition.get(true)) {
+            System.out.println(p);
+        }
+        System.out.println("People with age < 25 :");
+        for (Person p : agePartition.get(false)) {
+            System.out.println(p);
+        }
     }
 }
