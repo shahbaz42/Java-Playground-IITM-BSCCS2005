@@ -1,8 +1,10 @@
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 class Animal implements Comparable<Animal>{
     private String name;
@@ -24,6 +26,40 @@ class Animal implements Comparable<Animal>{
     public int compareTo(Animal other){
         return name.compareTo(other.name);
     }
+}
+
+class Person implements Comparable<Person>{
+    private int id;
+    private String name;
+    private int age;
+
+    public Person(int id, String name, int age){
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public String toString(){
+        return "Person { id : " + id + ", name : " + name + ", age : " + age + "}";
+    }
+
+    @Override
+    public int compareTo(Person other){
+        return Integer.compare(id, other.id);
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public int getAge(){
+        return age;
+    }
+    
 }
 
 public class collecting_data_from_streams {
@@ -94,7 +130,30 @@ public class collecting_data_from_streams {
         System.out.println("\nCollecting a stream of type Animal into a TreeSet");
         Stream<Animal> stream7 = Stream.of(cat, dog, falcon, lizard);
         TreeSet<Animal> treeset_animal = stream7.collect(Collectors.toCollection(TreeSet::new));
-        System.out.println("treeset_animal" + treeset_animal); 
+        System.out.println("treeset_animal : " + treeset_animal); 
 
+        // Converting a stream into a map
+        System.out.println("\nConverting a stream into a map");
+        Person shahbaz = new Person(01, "Shahbaz", 21 );
+        Person madhavan = new Person(2, "Madhavan", 35);
+        Person keshav = new Person(3, "Keshavan", 23);
+        Stream<Person> stream8 = Stream.of(shahbaz, madhavan, keshav);
+        Map<Integer, String> idToString = stream8.collect(Collectors.toMap(
+            Person::getId, 
+            Person::getName
+        ));
+        System.out.println(idToString);
+
+        // Converting a stream into a map and storing the whole object
+        System.out.println("\nConverting a stream into a map and keeping the whole object as a value.");
+        Stream<Person> stream9 = Stream.of(shahbaz, madhavan, keshav);
+        Map<Integer, Person> idToPerson = stream9.collect(Collectors.toMap(
+            Person::getId,
+            Function.identity()
+        ));
+        System.out.println(idToPerson);
+
+        // handling 
+        
     }
 }
