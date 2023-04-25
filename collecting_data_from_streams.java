@@ -5,8 +5,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
-import java.lang.reflect.Array;
+import java.util.function.Predicate;
 import java.util.HashMap;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+import java.util.function.Predicate;
 
 class Animal implements Comparable<Animal>{
     private String name;
@@ -203,5 +206,39 @@ public class collecting_data_from_streams {
         for (Person p : agePartition.get(false)) {
             System.out.println(p);
         }
+
+        // Generating Stream with Math.random
+        System.out.println("\nGenerating a Stream with stream.generate()");
+        Supplier<Double> random_double_supplier = () -> {
+            Double rn = Math.random();
+            System.out.println("Supplier got called.");
+            return(rn);
+        };
+
+        Stream<Double> stream14 = Stream.generate(random_double_supplier);
+        stream14
+            .limit(3)
+            .forEach(System.out::println);
+
+        // Generating a stream using stream.iterate()
+        System.out.println("\nGenerating a stream with Stream.iterate(seed, UnaryOperator<T> f)");
+        // UnaryOperator<Integer> increment_int = (n) -> {
+        //     return n+1;
+        // } ;
+        UnaryOperator<Integer> increment_int = n -> n+1 ;
+
+        Stream<Integer> stream15 = Stream.iterate(0, increment_int);
+        stream15
+            .limit(3)
+            .forEach(System.out::println);
+
+        // stream.itereate() overloaded
+        Predicate<Integer> less_than_4 = n -> n <4;
+        System.out.println(less_than_4.test(3));
+        Stream<Integer> stream16 = Stream.iterate(0, less_than_4, increment_int);
+        stream16
+            .limit(10)
+            .forEach(System.out::println);
+        
     }
 }
