@@ -239,6 +239,6 @@ public class collecting_data_from_streams {
         stream16
             .limit(10)
             .forEach(System.out::println);
-        
+            
     }
 }
