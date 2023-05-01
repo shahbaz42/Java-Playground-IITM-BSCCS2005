@@ -135,6 +135,52 @@ class Car implements Comparable<Car>{
     }
 }
 
+// Generics, Inheritance and Subtypes
+class Box<T>{
+    private T t;
+
+    public void set(T t){
+        this.t = t;
+    }
+
+    public T get(){
+        return t;
+    }
+}
+
+// Wildcards 
+class Wildcards{
+    public static void printList(List<?> l){
+        for(Object o : l){
+            System.out.println(o);
+        }
+    }
+
+    // upper bounded Wildcards : (subtypes)
+    public static void printNumericList(List<? extends Number> l){
+        for(Number o : l)
+            System.out.println("Rounded value  : " + o.intValue());
+    }
+
+    // lower bvounded wildcards
+    public static void printClass(List<? super Integer> l){ // Superclass of Integer i.e. Number Object
+        // for(Number i : l){}   // This will not work
+        for(Object o : l)
+            System.out.println(o.getClass());
+    }
+
+    // declaring generic type for above
+    public static <T extends Number> void printNumericList2(List<T> l){
+        for(Number o : l)
+            System.out.println("Rounded double value : " + o.doubleValue());
+    }
+
+    // print list of type Object
+    public static void printObjectListClassName( List<Object> l){
+        for(Object o  : l)
+            System.out.println("Object class : " + o.getClass());
+    }
+}
 
 
 public class generics {
@@ -202,23 +248,20 @@ public class generics {
         Car[] cars = {c1, c2, c3, c4};
         System.out.println("Number of cars with max speed greater than c4 : " + ArrayUtils.countGreaterThan(cars, c4));
 
-
-
-
-
-
-
+        // generics and inheritance
+        Box<Number> b = new Box<>();
+        b.set(Integer.valueOf(10));
+        System.out.println("b.get() : " + b.get());
+        // Box<Number> b2 = new Box<Integer>(); // Error because Box<Integer> is not a subtype of Box<Number>
         
+       // Wildcards
+        List<Integer> l3 = Arrays.asList(1,2,3,4,5);
+        Wildcards.printList(l3);
+        Wildcards.printNumericList2(l3);
 
-
-        
-
-
-
-
-
-
-
-        
+        List<Object> l4 = new LinkedList<>();
+        l4.add(new Person("Sarabhai", 30));
+        l4.add(new Car("Senna", 400));
+        Wildcards.printObjectListClassName(l4);
     }
 }
