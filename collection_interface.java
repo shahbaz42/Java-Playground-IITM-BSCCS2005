@@ -1,4 +1,5 @@
 import java.util.Collection;
+import java.util.AbstractCollection;
 import java.util.Iterator;
 
 class SimpleCollection<E> implements Collection<E>{
@@ -134,6 +135,43 @@ class SimpleCollection<E> implements Collection<E>{
 }
 
 
+class SimpleCollection2<E> extends AbstractCollection<E>{ // Abstract class exists because at that time default keyword didn't exist.
+    private E[] elements;
+    private int size;
+    private int capacity;
+
+    public SimpleCollection2(int capacity){
+        this.capacity = capacity;
+        this.size = 0;
+        this.elements = (E[]) new Object[capacity]; // 
+    }
+
+    public int size(){
+        return size;
+    }
+
+    public Iterator<E> iterator(){
+        return new Iterator<E>(){
+            private int  index = 0;
+
+            public boolean hasNext(){
+                return index<size;
+            }
+
+            public E next(){
+                return elements[index++];
+            }
+        }; 
+    } 
+
+    public boolean add(E element){
+        if(size >= capacity)
+            return false;
+        elements[size++] = element;
+        return true;
+    }
+}
+
 public class collection_interface {
     public static void main(String[] args) {
         SimpleCollection<String> c1 = new SimpleCollection<>(10);
@@ -151,5 +189,18 @@ public class collection_interface {
             System.out.println(s);
         }
         System.out.println(c1);
+
+        // SimpleCollection2
+        SimpleCollection2<Integer> c2 = new SimpleCollection2<>(10);
+        try{
+            c2.clear();
+            c2.add(1);
+            c2.add(2);
+            c2.forEach(System.out::println);
+        }
+        catch (UnsupportedOperationException e) {
+            System.out.println("Unsupported method.");
+        }
+        System.out.println(c2);
     }
 }
