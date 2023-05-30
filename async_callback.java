@@ -27,7 +27,7 @@ class Timer implements Runnable{
     }
 }
 
-public class callbacks {
+public class async_callback {
     public static void main(String[] args) {
         TimerOwner parentFunction = new TimerOwner();
         Timer t1 = new Timer(5000, parentFunction);
